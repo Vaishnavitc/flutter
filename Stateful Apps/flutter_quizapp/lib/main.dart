@@ -56,8 +56,10 @@ class QuizApp extends StatefulWidget{
 
     int currentQuestionIndex = 0;
     int selectedAnswerIndex = -1;
+    bool questionPage = true;
+    int score = 0;
 
-    WidgetStateProperty<Color?> checkAnswer(int answerIndex){
+    WidgetStateProperty<Color?>checkAnswer(int answerIndex){
       if(selectedAnswerIndex != -1) {
         if  (answerIndex == allQuestions[currentQuestionIndex]["correctAnswer"]) {
           return const WidgetStatePropertyAll(Colors.green);
@@ -71,8 +73,7 @@ class QuizApp extends StatefulWidget{
       }
     }
 
-    bool questionPage = true;
-
+   
     @override
 
     Widget build(BuildContext context){
@@ -257,13 +258,19 @@ class QuizApp extends StatefulWidget{
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             if(selectedAnswerIndex != -1){
+              if(selectedAnswerIndex!=-1){
+                if(selectedAnswerIndex==allQuestions[currentQuestionIndex]["correctAnswer"]){
+                  score++;
+                }
               //THIS CHECK THE CONDITION AND SHOWS THE RESULT SCREEN
               if(currentQuestionIndex < allQuestions.length - 1){
                 currentQuestionIndex++;
+
               }else{
                 questionPage = false;
               }
               selectedAnswerIndex = -1;
+              }
                   setState(() {});
                 }
               },
@@ -296,6 +303,7 @@ class QuizApp extends StatefulWidget{
                     "https://t4.ftcdn.net/jpg/05/93/91/27/360_F_593912714_6pEIEP3Y1FQkbwknHEYxQzbne5ZN6B1E.jpg",
                     height: 300,
                   ),
+              
 
                   const SizedBox(height: 30),
                   const Text(
@@ -306,15 +314,67 @@ class QuizApp extends StatefulWidget{
                       color: Colors.orange,
                     ),
                   ),
+            
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    children:[
+                      const SizedBox(
+                        width: 110,
+                      ),
 
-                  const SizedBox(height: 40),
-                  const Text("Score: "),
+                  SizedBox(
+                    height: 50,
+                    width: 300,
+                    child: Text("Score: $score/${allQuestions.length}",
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    ),
+                  ),
+                  
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                children: [ 
+            const  SizedBox(
+          width: 76,
+        ),
+            
+            SizedBox(
+          height: 50,
+          width: 300,
+          child: ElevatedButton(
+            onPressed: (){
+              questionPage=true;
+              selectedAnswerIndex=-1;
+              currentQuestionIndex=0;
+              score=0;
+              setState(() {});
+            },
+            child:const Text("RESET QUIZ",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+                backgroundColor: Colors.blue,
+          ),
+            ),
+            ),
+            ),
+                ],
+              ),
                 ],
               ),
             ),
-          );
+              );
         }
     }
   }
-            
-       
+              
+             
